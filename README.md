@@ -80,15 +80,7 @@ The agents explain the law in plain language, walk users through options, and de
 
 ### Preview
 
-| | | |
-| --- | --- | --- |
-| <img src="docs/screenshots/01-splash.png" width="220" alt="Splash"> | <img src="docs/screenshots/02-onboarding.png" width="220" alt="Onboarding"> | <img src="docs/screenshots/03-home.png" width="220" alt="Home"> |
-| <img src="docs/screenshots/04-agents.png" width="220" alt="Agents"> | <img src="docs/screenshots/05-agent-detail.png" width="220" alt="Agent detail"> | <img src="docs/screenshots/06-chat.png" width="220" alt="AI chat"> |
-| <img src="docs/screenshots/07-video-call.png" width="220" alt="Video call"> | <img src="docs/screenshots/08-profile.png" width="220" alt="Profile"> | <img src="docs/screenshots/09-users.png" width="220" alt="Users"> |
-
-*Screenshots are rendered automatically from golden tests — see [Preview generation](#preview-generation).*
-
----
+ -- Coming soon
 
 ## 🛠 Tech Stack
 
