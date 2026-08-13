@@ -14,11 +14,14 @@ import '../../../routes/app_routes.dart';
 class AgentDetailScreen extends StatelessWidget {
   const AgentDetailScreen({super.key});
 
-  LegalAgent get _agent => Get.arguments as LegalAgent;
+  LegalAgent? get _agent => Get.arguments as LegalAgent?;
 
   @override
   Widget build(BuildContext context) {
-    final LegalAgent agent = _agent;
+    final LegalAgent? agent = _agent;
+    if (agent == null) {
+      return const _AgentMissingView();
+    }
     final AppPalette c = Theme.of(context).brightness == Brightness.dark
         ? AppColors.dark
         : AppColors.light;
@@ -110,7 +113,7 @@ class AgentDetailScreen extends StatelessWidget {
                             )
                             .toList(),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 120),
                     ],
                   ),
                 ),
@@ -124,6 +127,43 @@ class AgentDetailScreen extends StatelessWidget {
             child: _CtaBar(agent: agent),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AgentMissingView extends StatelessWidget {
+  const _AgentMissingView();
+
+  @override
+  Widget build(BuildContext context) {
+    final AppPalette c = Theme.of(context).brightness == Brightness.dark
+        ? AppColors.dark
+        : AppColors.light;
+
+    return Scaffold(
+      appBar: AppBar(leading: _RoundBackButton(onTap: () => Get.back())),
+      body: Center(
+        child: Padding(
+          padding: AppDimensions.screenPadding,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.person_off_rounded, size: 56, color: c.textSubtle),
+              const SizedBox(height: 16),
+              Text(
+                'Agent not found',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Please go back and select an agent again.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: c.textSubtle),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
