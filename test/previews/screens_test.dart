@@ -48,7 +48,7 @@ void main() {
     id: 'a1',
     name: 'Amelia Hart',
     title: 'Senior AI Counsel',
-    emoji: '🦉',
+    photo: 'assets/agents/a1.jpg',
     practiceAreas: [PracticeArea.corporate, PracticeArea.tax],
     rating: 4.9,
     consultations: 12480,
@@ -107,6 +107,10 @@ void main() {
     );
     await tester.pump(const Duration(milliseconds: 1600));
     await capture(tester, '03-home');
+    // Flush entrance-animation timers (fixed pump; home has an
+    // infinitely-repeating pulse dot so pumpAndSettle never settles).
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pump(const Duration(seconds: 1));
   });
 
   testWidgets('agents preview', (tester) async {
@@ -119,6 +123,9 @@ void main() {
     );
     await tester.pump(const Duration(milliseconds: 1600));
     await capture(tester, '04-agents');
+    // Flush entrance-animation timers so none are left pending.
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('agent detail preview', (tester) async {

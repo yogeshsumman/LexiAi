@@ -111,8 +111,7 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.only(left: 10),
         child: Center(
           child: AgentAvatar(
-            emoji: agent.emoji,
-            gradientIndex: agent.gradientIndex,
+            agent: agent,
             size: 42,
             showRing: false,
           ),
@@ -205,7 +204,7 @@ class _MessageBubble extends StatelessWidget {
         gradient: isAgent
             ? null
             : const LinearGradient(
-                colors: [Color(0xFF16294A), Color(0xFF223B66)],
+                colors: [AppColors.slate, AppColors.navy],
               ),
         color: isAgent ? c.surfaceAlt : null,
         borderRadius: BorderRadius.only(
@@ -236,8 +235,7 @@ class _MessageBubble extends StatelessWidget {
         children: [
           if (isAgent) ...[
             AgentAvatar(
-              emoji: agent.emoji,
-              gradientIndex: agent.gradientIndex,
+              agent: agent,
               size: 30,
               showRing: false,
             ),

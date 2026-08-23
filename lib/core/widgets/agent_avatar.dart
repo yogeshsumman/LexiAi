@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/models/legal_agent.dart';
 import '../constants/app_colors.dart';
 
-/// Gradient avatar used for AI agents (emoji mascot on a brand gradient).
+/// Photorealistic headshot avatar for AI lawyer agents.
+///
+/// Renders the agent's portrait asset inside a circular frame. If the
+/// portrait is missing or fails to load, it degrades gracefully to a
+/// brand-gradient monogram, so layouts stay intact during asset swaps.
 class AgentAvatar extends StatelessWidget {
   const AgentAvatar({
     super.key,
-    required this.emoji,
-    required this.gradientIndex,
+    required this.agent,
     this.size = 56,
     this.showRing = true,
   });
 
-  final String emoji;
-  final int gradientIndex;
+  final LegalAgent agent;
   final double size;
   final bool showRing;
 
   @override
   Widget build(BuildContext context) {
     final List<Color> gradient = AppColors
-        .agentGradients[gradientIndex % AppColors.agentGradients.length];
+        .agentGradients[agent.gradientIndex % AppColors.agentGradients.length];
 
     return Container(
       width: size,
@@ -37,14 +40,32 @@ class AgentAvatar extends StatelessWidget {
             : null,
         boxShadow: [
           BoxShadow(
-            color: gradient.last.withValues(alpha: 0.4),
-            blurRadius: size * 0.4,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.22),
+            blurRadius: size * 0.28,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: Center(
-        child: Text(emoji, style: TextStyle(fontSize: size * 0.48)),
+      child: ClipOval(
+        child: Image.asset(
+          agent.photo,
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          filterQuality: FilterQuality.medium,
+          gaplessPlayback: true,
+          errorBuilder: (_, _, _) => Center(
+            child: Text(
+              agent.initials,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: size * 0.32,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

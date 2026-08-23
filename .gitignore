@@ -145,3 +145,5 @@ app.*.symbols
 
 # FVM Version Cache
 .fvm/
+# Golden test failure diffs
+test/previews/failures/

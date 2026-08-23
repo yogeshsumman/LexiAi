@@ -191,8 +191,7 @@ class _HeroHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AgentAvatar(
-            emoji: agent.emoji,
-            gradientIndex: agent.gradientIndex,
+            agent: agent,
             size: 116,
           ),
           const SizedBox(height: 18),

@@ -1,12 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 
 import '../../../base/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/constants/app_motion.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/agent_avatar.dart';
+import '../../../core/widgets/pressable.dart';
 import '../../../core/widgets/skeleton.dart';
 import '../../../domain/models/legal_agent.dart';
 import '../../../routes/app_routes.dart';
@@ -79,7 +84,14 @@ class AgentsScreen extends StatelessWidget {
                     childAspectRatio: 0.70,
                   ),
                   itemCount: agents.length,
-                  itemBuilder: (context, i) => _AgentGridCard(agent: agents[i]),
+                  itemBuilder: (context, i) => _AgentGridCard(
+                    // Replays the entrance when the search query changes.
+                    key: ValueKey(
+                      '${agents[i].id}-${controller.query.value ?? ''}',
+                    ),
+                    agent: agents[i],
+                    index: i,
+                  ),
                 );
               },
             ),
@@ -91,9 +103,10 @@ class AgentsScreen extends StatelessWidget {
 }
 
 class _AgentGridCard extends StatelessWidget {
-  const _AgentGridCard({required this.agent});
+  const _AgentGridCard({super.key, required this.agent, this.index = 0});
 
   final LegalAgent agent;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +114,7 @@ class _AgentGridCard extends StatelessWidget {
         ? AppColors.dark
         : AppColors.light;
 
-    return GestureDetector(
+    return Pressable(
       onTap: () => Get.toNamed(AppRoutes.agentDetail, arguments: agent),
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -116,8 +129,7 @@ class _AgentGridCard extends StatelessWidget {
             Row(
               children: [
                 AgentAvatar(
-                  emoji: agent.emoji,
-                  gradientIndex: agent.gradientIndex,
+                  agent: agent,
                   size: 48,
                 ),
                 const Spacer(),
@@ -173,7 +185,7 @@ class _AgentGridCard extends StatelessWidget {
             const Spacer(),
             Row(
               children: [
-                const Icon(Icons.star_rounded, color: Colors.amber, size: 16),
+                const Icon(Icons.star_rounded, color: AppColors.brass, size: 16),
                 const SizedBox(width: 4),
                 Text(
                   '${agent.rating}',
@@ -196,6 +208,14 @@ class _AgentGridCard extends StatelessWidget {
           ],
         ),
       ),
+    ).animate(delay: AppMotion.staggerStep * min(index, 8)).fadeIn(
+      duration: AppMotion.slow,
+      curve: AppMotion.emphasized,
+    ).slideY(
+      begin: 0.1,
+      end: 0,
+      duration: AppMotion.slow,
+      curve: AppMotion.emphasized,
     );
   }
 }

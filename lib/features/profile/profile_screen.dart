@@ -33,14 +33,14 @@ class ProfileScreen extends StatelessWidget {
                   height: 92,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: kGoldGradient,
+                    gradient: kNavyGradient,
                     border: Border.all(
-                      color: AppColors.gold.withValues(alpha: 0.5),
+                      color: AppColors.navy.withValues(alpha: 0.5),
                       width: 2,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.gold.withValues(alpha: 0.4),
+                        color: AppColors.navy.withValues(alpha: 0.4),
                         blurRadius: 28,
                         offset: const Offset(0, 10),
                       ),
@@ -110,10 +110,10 @@ class _MembershipCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: kNavyGradient,
+        gradient: kMidnightGradient,
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF16294A).withValues(alpha: 0.35),
+            color: AppColors.midnight.withValues(alpha: 0.35),
             blurRadius: 22,
             offset: const Offset(0, 10),
           ),
@@ -129,14 +129,14 @@ class _MembershipCard extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.workspace_premium_rounded,
-                      color: AppColors.goldLight,
+                      color: AppColors.porcelain,
                       size: 20,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       'PRO MEMBER',
                       style: TextStyle(
-                        color: AppColors.goldLight,
+                        color: AppColors.porcelain,
                         fontWeight: FontWeight.w800,
                         fontSize: 13,
                         letterSpacing: 1.4,
@@ -166,7 +166,7 @@ class _MembershipCard extends StatelessWidget {
           ),
           const Icon(
             Icons.auto_awesome_rounded,
-            color: AppColors.goldLight,
+            color: AppColors.porcelain,
             size: 34,
           ),
         ],

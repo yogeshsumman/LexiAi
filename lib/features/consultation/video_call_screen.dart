@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/constants/app_colors.dart';
 import '../../../domain/models/legal_agent.dart';
 import 'widgets/agent_stage.dart';
 import 'widgets/call_controls.dart';
@@ -94,7 +95,7 @@ class _VideoCallScreenState extends State<VideoCallScreen>
             end: Alignment.bottomCenter,
             colors: dark
                 ? const [Color(0xFF0A0F1E), Color(0xFF02040A)]
-                : const [Color(0xFF16294A), Color(0xFF0B1526)],
+                : const [AppColors.slate, AppColors.navy],
           ),
         ),
         child: SafeArea(

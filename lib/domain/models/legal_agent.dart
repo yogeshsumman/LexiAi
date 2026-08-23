@@ -11,7 +11,7 @@ class LegalAgent extends Equatable {
     required this.id,
     required this.name,
     required this.title,
-    required this.emoji,
+    required this.photo,
     required this.practiceAreas,
     required this.rating,
     required this.consultations,
@@ -26,7 +26,10 @@ class LegalAgent extends Equatable {
   final String id;
   final String name;
   final String title;
-  final String emoji;
+
+  /// Asset path of the agent's photorealistic headshot,
+  /// e.g. `assets/agents/a1.jpg`.
+  final String photo;
   final List<PracticeArea> practiceAreas;
   final double rating;
   final int consultations;

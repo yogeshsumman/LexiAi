@@ -3,11 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../constants/app_dimensions.dart';
+import '../constants/app_motion.dart';
 import '../theme/app_theme.dart';
 
-/// Primary CTA button with brand gradient, press-scale feedback and
+/// Primary CTA button with brand gradient, springy press-scale feedback and
 /// optional leading icon.
-class GradientButton extends StatelessWidget {
+class GradientButton extends StatefulWidget {
   const GradientButton({
     super.key,
     required this.label,
@@ -30,84 +31,85 @@ class GradientButton extends StatelessWidget {
   final bool expand;
 
   @override
+  State<GradientButton> createState() => _GradientButtonState();
+}
+
+class _GradientButtonState extends State<GradientButton> {
+  bool _pressed = false;
+
+  bool get _enabled => widget.onPressed != null && !widget.loading;
+
+  @override
   Widget build(BuildContext context) {
-    final bool enabled = onPressed != null && !loading;
-    return AnimatedScale(
-      scale: enabled ? 1 : 0.97,
-      duration: const Duration(milliseconds: 140),
-      child: Container(
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          gradient:
-              gradient ??
-              (enabled
-                  ? kGoldGradient
-                  : const LinearGradient(
-                      colors: [Color(0xFF3A3A3A), Color(0xFF2A2A2A)],
-                    )),
-          boxShadow: enabled
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.18),
-                    blurRadius: 16,
-                    offset: const Offset(0, 8),
-                  ),
-                ]
-              : null,
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
+    return Listener(
+      onPointerDown: _enabled ? (_) => setState(() => _pressed = true) : null,
+      onPointerUp: (_) => setState(() => _pressed = false),
+      onPointerCancel: (_) => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.965 : 1.0,
+        duration: AppMotion.fast,
+        curve: AppMotion.emphasized,
+        child: Container(
+          height: widget.height,
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            onTap: enabled ? onPressed : null,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
-              child: Row(
-                mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (loading) ...[
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.4,
-                        color: foreground.withValues(alpha: 0.9),
-                      ),
+            gradient:
+                widget.gradient ??
+                (_enabled
+                    ? kNavyGradient
+                    : const LinearGradient(
+                        colors: [Color(0xFFB4AFA5), Color(0xFF9C968A)],
+                      )),
+            boxShadow: _enabled
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.22),
+                      blurRadius: _pressed ? 10 : 16,
+                      offset: Offset(0, _pressed ? 4 : 8),
                     ),
-                    const SizedBox(width: 10),
-                  ] else if (icon != null) ...[
-                    Icon(icon, color: foreground, size: 20),
-                    const SizedBox(width: 10),
-                  ],
-                  if (expand)
+                  ]
+                : null,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: _enabled ? widget.onPressed : null,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
+                child: Row(
+                  mainAxisSize: widget.expand ? MainAxisSize.max : MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (widget.loading) ...[
+                      SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: widget.foreground.withValues(alpha: 0.9),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                    ] else if (widget.icon != null) ...[
+                      Icon(widget.icon, color: widget.foreground, size: 20),
+                      const SizedBox(width: 10),
+                    ],
                     Flexible(
                       child: Text(
-                        label,
+                        widget.label,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: foreground,
+                          color: widget.foreground,
                           fontSize: 15.5,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.2,
                         ),
                       ),
-                    )
-                  else
-                    Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: foreground,
-                        fontSize: 15.5,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.2,
-                      ),
                     ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
