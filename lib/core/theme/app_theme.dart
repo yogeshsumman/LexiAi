@@ -130,7 +130,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: AppColors.gold, width: 1.6),
+          borderSide: const BorderSide(color: AppColors.brass, width: 1.6),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
@@ -167,16 +167,16 @@ class AppTheme {
   }
 }
 
-/// Gold-to-deep gradient used for primary brand CTAs.
-const LinearGradient kGoldGradient = LinearGradient(
-  colors: [AppColors.goldLight, AppColors.gold],
+/// Navy gradient used for primary brand CTAs (trust-forward).
+const LinearGradient kNavyGradient = LinearGradient(
+  colors: [Color(0xFF26466B), AppColors.navy],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
 
-/// Navy gradient used for hero surfaces and dark panels.
-const LinearGradient kNavyGradient = LinearGradient(
-  colors: [Color(0xFF16294A), Color(0xFF0B1526)],
+/// Midnight gradient for hero surfaces and dark panels.
+const LinearGradient kMidnightGradient = LinearGradient(
+  colors: [Color(0xFF1B3049), Color(0xFF0F1D2E)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );

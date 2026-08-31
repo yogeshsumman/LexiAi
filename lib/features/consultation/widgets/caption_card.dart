@@ -34,7 +34,7 @@ class CaptionCard extends StatelessWidget {
               const Icon(
                 Icons.graphic_eq_rounded,
                 size: 18,
-                color: AppColors.goldLight,
+                color: AppColors.porcelain,
               ),
               const SizedBox(width: 12),
               Expanded(

@@ -60,12 +60,36 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   retrofit_generator: ^10.0.1
-  build_runner: ^2.6.0
+  build_runner: ^2.12.0
   json_serializable: ^6.10.0
+  flutter_gen_runner: ^5.15.0
+  flutter_launcher_icons: ^0.14.4
 
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+# Codegen config for type-safe asset references (flutter_gen).
+# Run: dart run build_runner build --delete-conflicting-outputs
+flutter_gen:
+  output: lib/gen/
+  line_length: 100
+
+# Launcher icon generation.
+# Run: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/icon/app_icon.png"
+  android: true
+  min_sdk_android: 21
+  adaptive_icon_background: "#15263A"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/icon/app_icon.png"
+    background_color: "#15263A"
+    theme_color: "#1E3A5C"
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -77,6 +101,7 @@ flutter:
 
   assets:
     - assets/animations/
+    - assets/agents/
 
   fonts:
     - family: Manrope

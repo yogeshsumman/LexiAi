@@ -1,6 +1,7 @@
 import '../../domain/models/legal_agent.dart';
 import '../../domain/models/practice_area.dart';
 import '../../domain/repositories/agent_repository.dart';
+import '../../gen/assets.gen.dart';
 
 /// Local/mock implementation of [AgentRepository].
 ///
@@ -34,7 +35,7 @@ class AgentRepositoryImpl implements AgentRepository {
       id: 'a1',
       name: 'Amelia Hart',
       title: 'Senior AI Counsel',
-      emoji: '🦉',
+      photo: Assets.agents.a1.path,
       practiceAreas: const [PracticeArea.corporate, PracticeArea.tax],
       rating: 4.9,
       consultations: 12480,
@@ -50,7 +51,7 @@ class AgentRepositoryImpl implements AgentRepository {
       id: 'a2',
       name: 'Marcus Chen',
       title: 'IP & Innovation Agent',
-      emoji: '🦅',
+      photo: Assets.agents.a2.path,
       practiceAreas: const [PracticeArea.ip],
       rating: 4.8,
       consultations: 8932,
@@ -66,7 +67,7 @@ class AgentRepositoryImpl implements AgentRepository {
       id: 'a3',
       name: 'Sofia Rossi',
       title: 'Family Law Agent',
-      emoji: '🦊',
+      photo: Assets.agents.a3.path,
       practiceAreas: const [PracticeArea.family],
       rating: 4.9,
       consultations: 15320,
@@ -82,7 +83,7 @@ class AgentRepositoryImpl implements AgentRepository {
       id: 'a4',
       name: 'James Okafor',
       title: 'Criminal Defense Agent',
-      emoji: '🐺',
+      photo: Assets.agents.a4.path,
       practiceAreas: const [PracticeArea.criminal],
       rating: 4.7,
       consultations: 7214,
@@ -97,7 +98,7 @@ class AgentRepositoryImpl implements AgentRepository {
       id: 'a5',
       name: 'Priya Sharma',
       title: 'Tax & Estate Agent',
-      emoji: '🐯',
+      photo: Assets.agents.a5.path,
       practiceAreas: const [PracticeArea.tax, PracticeArea.corporate],
       rating: 4.8,
       consultations: 11047,
@@ -112,7 +113,7 @@ class AgentRepositoryImpl implements AgentRepository {
       id: 'a6',
       name: 'Elena Petrova',
       title: 'Immigration Agent',
-      emoji: '🐳',
+      photo: Assets.agents.a6.path,
       practiceAreas: const [PracticeArea.immigration],
       rating: 4.9,
       consultations: 16890,
@@ -127,7 +128,7 @@ class AgentRepositoryImpl implements AgentRepository {
       id: 'a7',
       name: 'Noah Kim',
       title: 'Employment Agent',
-      emoji: '🐼',
+      photo: Assets.agents.a7.path,
       practiceAreas: const [PracticeArea.employment],
       rating: 4.6,
       consultations: 6451,
@@ -142,7 +143,7 @@ class AgentRepositoryImpl implements AgentRepository {
       id: 'a8',
       name: 'Isabella Cruz',
       title: 'Real Estate Agent',
-      emoji: '🦜',
+      photo: Assets.agents.a8.path,
       practiceAreas: const [PracticeArea.realEstate],
       rating: 4.8,
       consultations: 9875,

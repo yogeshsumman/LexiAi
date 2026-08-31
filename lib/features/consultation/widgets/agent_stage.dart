@@ -44,7 +44,7 @@ class ConnectingStage extends StatelessWidget {
           height: 88,
           child: CircularProgressIndicator(
             strokeWidth: 2.5,
-            color: AppColors.goldLight,
+            color: AppColors.porcelain,
           ),
         ),
         const SizedBox(height: 26),
@@ -83,8 +83,7 @@ class ConnectedStage extends StatelessWidget {
           children: [
             PulseRings(agent: agent),
             AgentAvatar(
-              emoji: agent.emoji,
-              gradientIndex: agent.gradientIndex,
+              agent: agent,
               size: 168,
             ),
           ],
@@ -113,7 +112,7 @@ class ConnectedStage extends StatelessWidget {
             animation: waveform,
             builder: (context, child) => VoiceWaveform(
               progress: waveform.value,
-              color: AppColors.goldLight,
+              color: AppColors.porcelain,
             ),
           ),
         ),

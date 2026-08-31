@@ -235,7 +235,7 @@ class _Illustration extends StatelessWidget {
                 colors: [Color(0x33C9A227), Color(0x1116294A)],
               ),
               border: Border.all(
-                color: AppColors.gold.withValues(alpha: 0.35),
+                color: AppColors.navy.withValues(alpha: 0.35),
                 width: 1.4,
               ),
             ),
@@ -253,13 +253,13 @@ class _Illustration extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  AppColors.gold.withValues(alpha: 0.9),
-                  AppColors.goldDeep,
+                  AppColors.navy.withValues(alpha: 0.9),
+                  AppColors.slate,
                 ],
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.gold.withValues(alpha: 0.45),
+                  color: AppColors.navy.withValues(alpha: 0.45),
                   blurRadius: 44,
                   offset: const Offset(0, 14),
                 ),

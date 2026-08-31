@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
+import '../../core/constants/app_motion.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/widgets/pressable.dart';
 import '../agents/agents_screen.dart';
 import '../home/home_screen.dart';
 import '../profile/profile_screen.dart';
@@ -37,7 +40,7 @@ class MainShell extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          color: dark ? const Color(0xFF121A2B) : Colors.white,
+          color: dark ? const Color(0xFF182236) : Colors.white,
           border: Border.all(
             color: Theme.of(
               context,
@@ -102,39 +105,45 @@ class _NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+      child: Pressable(
         onTap: onTap,
+        scale: 0.94,
+        dim: 0.85,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 260),
-          curve: Curves.easeOutCubic,
+          duration: AppMotion.base,
+          curve: AppMotion.emphasized,
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            gradient: selected ? kGoldGradient : null,
+            gradient: selected ? kNavyGradient : null,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 22,
-                color: selected
-                    ? const Color(0xFF2A1F0A)
-                    : Theme.of(context).colorScheme.onSurfaceVariant,
+              AnimatedScale(
+                scale: selected ? 1.08 : 1.0,
+                duration: AppMotion.base,
+                curve: AppMotion.spring,
+                child: Icon(
+                  icon,
+                  size: 22,
+                  color: selected
+                      ? AppColors.porcelain
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
               AnimatedSize(
-                duration: const Duration(milliseconds: 260),
-                curve: Curves.easeOutCubic,
+                duration: AppMotion.base,
+                curve: AppMotion.emphasized,
                 child: selected
                     ? Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: Text(
                           label,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w800,
                             fontSize: 13.5,
-                            color: const Color(0xFF2A1F0A),
+                            color: AppColors.porcelain,
                           ),
                         ),
                       )

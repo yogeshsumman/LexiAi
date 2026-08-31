@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../theme/app_theme.dart';
 
-/// The LexiAI brand mark: a scales-of-justice glyph on a gold gradient,
-/// optionally surrounded by a soft glow ring.
+/// The LexiAI brand mark: a brass scales-of-justice glyph on a navy disc,
+/// optionally surrounded by a soft brass glow ring.
 class LexiLogo extends StatelessWidget {
   const LexiLogo({super.key, this.size = 88, this.showRing = true});
 
@@ -19,10 +19,10 @@ class LexiLogo extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: kGoldGradient,
+        gradient: kNavyGradient,
         boxShadow: [
           BoxShadow(
-            color: AppColors.gold.withValues(alpha: 0.35),
+            color: AppColors.brass.withValues(alpha: 0.35),
             blurRadius: size * 0.35,
             spreadRadius: showRing ? size * 0.05 : 0,
           ),
@@ -32,7 +32,7 @@ class LexiLogo extends StatelessWidget {
         child: Icon(
           Icons.balance_rounded,
           size: iconSize,
-          color: const Color(0xFF2A1F0A),
+          color: AppColors.brassLight,
         ),
       ),
     );

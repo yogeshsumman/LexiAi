@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
             end: Alignment.bottomCenter,
             colors: dark
                 ? const [Color(0xFF0A0F1E), Color(0xFF0F1830)]
-                : const [Color(0xFF16294A), Color(0xFF0E1A33)],
+                : const [AppColors.midnight, Color(0xFF0E0E10)],
           ),
         ),
         child: Stack(
@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
               right: -80,
               child: _GlowOrb(
                 size: 260,
-                color: AppColors.gold.withValues(alpha: 0.16),
+                color: AppColors.navy.withValues(alpha: 0.16),
               ),
             ),
             Positioned(
@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
               left: -60,
               child: _GlowOrb(
                 size: 300,
-                color: AppColors.steel.withValues(alpha: 0.14),
+                color: AppColors.porcelain.withValues(alpha: 0.14),
               ),
             ),
             Center(

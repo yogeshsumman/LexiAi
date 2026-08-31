@@ -49,7 +49,7 @@ class _UserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool dark = Theme.of(context).brightness == Brightness.dark;
     final List<Color> gradient = [
-      dark ? const Color(0xFF1C2740) : const Color(0xFFEFEAE0),
+      dark ? const Color(0xFF223049) : const Color(0xFFF1EDE6),
       dark ? const Color(0xFF131C2E) : const Color(0xFFE4DED2),
     ];
 

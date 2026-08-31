@@ -62,7 +62,7 @@ class VideoTopBar extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: connected
                             ? AppColors.success
-                            : AppColors.goldLight,
+                            : AppColors.porcelain,
                       ),
                     ),
                     const SizedBox(width: 6),

@@ -1,14 +1,19 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 
 import '../../../base/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/constants/app_motion.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/gradient_button.dart';
 import '../../../core/widgets/agent_avatar.dart';
+import '../../../core/widgets/pressable.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../core/widgets/skeleton.dart';
 import '../../../domain/models/legal_agent.dart';
@@ -90,10 +95,20 @@ class HomeScreen extends StatelessWidget {
                         if (list.isEmpty)
                           const _EmptyAgents()
                         else
-                          ...list.map(
-                            (agent) => Padding(
+                          ...list.asMap().entries.map(
+                            (entry) => Padding(
                               padding: const EdgeInsets.only(bottom: 12),
-                              child: _AgentTile(agent: agent),
+                              child: _AgentTile(
+                                // Keyed by agent + active filter so changing
+                                // the practice-area chip remounts tiles and
+                                // replays the staggered entrance.
+                                key: ValueKey(
+                                  '${entry.value.id}-'
+                                  '${controller.selectedArea.value?.name ?? 'all'}',
+                                ),
+                                agent: entry.value,
+                                index: entry.key,
+                              ),
                             ),
                           ),
                       ],
@@ -130,7 +145,7 @@ class _Header extends StatelessWidget {
         20,
       ),
       decoration: BoxDecoration(
-        gradient: kNavyGradient,
+        gradient: kMidnightGradient,
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(32)),
       ),
       child: Column(
@@ -139,30 +154,41 @@ class _Header extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      hour < 12
-                          ? AppStrings.greetingMorning
-                          : hour < 18
-                          ? AppStrings.greetingAfternoon
-                          : AppStrings.greetingEvening,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.7),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Alex Morgan',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineLarge?.copyWith(color: Colors.white),
-                    ),
-                  ],
-                ),
+                child:
+                    Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              hour < 12
+                                  ? AppStrings.greetingMorning
+                                  : hour < 18
+                                  ? AppStrings.greetingAfternoon
+                                  : AppStrings.greetingEvening,
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.7),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Alex Morgan',
+                              style: Theme.of(context).textTheme.headlineLarge
+                                  ?.copyWith(color: Colors.white),
+                            ),
+                          ],
+                        )
+                        .animate(delay: 40.ms)
+                        .fadeIn(
+                          duration: AppMotion.slow,
+                          curve: AppMotion.emphasized,
+                        )
+                        .slideY(
+                          begin: 0.25,
+                          end: 0,
+                          duration: AppMotion.slow,
+                          curve: AppMotion.emphasized,
+                        ),
               ),
               _NotificationButton(c: c),
             ],
@@ -173,28 +199,36 @@ class _Header extends StatelessWidget {
               const _Avatar(emoji: '👩‍⚖️', size: 44),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${controller.featured.length} AI agents online',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${controller.featured.length} AI agents online',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Consult now — average wait 14s',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.6),
+                            fontSize: 12.5,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'Consult now — average wait 14s',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
-                        fontSize: 12.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  )
+                  .animate(delay: 120.ms)
+                  .fadeIn(duration: AppMotion.slow, curve: AppMotion.emphasized)
+                  .slideY(
+                    begin: 0.2,
+                    end: 0,
+                    duration: AppMotion.slow,
+                    curve: AppMotion.emphasized,
+                  ),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -295,7 +329,7 @@ class _Avatar extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: kGoldGradient,
+        gradient: kNavyGradient,
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.35),
           width: 2,
@@ -423,108 +457,112 @@ class _FeaturedCard extends StatelessWidget {
     final List<Color> colors = AppColors
         .agentGradients[agent.gradientIndex % AppColors.agentGradients.length];
 
-    return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.agentDetail, arguments: agent),
-      child: Container(
-        width: 280,
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [colors[0], colors[1]],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: colors[1].withValues(alpha: 0.35),
-              blurRadius: 18,
-              offset: const Offset(0, 8),
+    return Pressable(
+          onTap: () => Get.toNamed(AppRoutes.agentDetail, arguments: agent),
+          child: Container(
+            width: 280,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [colors[0], colors[1]],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: colors[1].withValues(alpha: 0.35),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AgentAvatar(
-                  emoji: agent.emoji,
-                  gradientIndex: agent.gradientIndex,
-                  size: 52,
+                Row(
+                  children: [
+                    AgentAvatar(agent: agent, size: 52),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(99),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.star_rounded,
+                            color: AppColors.brass,
+                            size: 15,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${agent.rating}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.18),
-                    borderRadius: BorderRadius.circular(99),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        color: Colors.amber,
-                        size: 15,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${agent.rating}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Text(
-              agent.name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              agent.title,
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.8),
-                fontSize: 12.5,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                const Icon(
-                  Icons.schedule_rounded,
-                  color: Colors.white,
-                  size: 15,
-                ),
-                const SizedBox(width: 5),
                 Text(
-                  '~${Formatters.shortDuration(agent.responseTime)} response',
+                  agent.name,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
                   ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  agent.title,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.8),
+                    fontSize: 12.5,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.schedule_rounded,
+                      color: Colors.white,
+                      size: 15,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      '~${Formatters.shortDuration(agent.responseTime)} response',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        )
+        .animate(delay: AppMotion.staggerStep * min(index, 5))
+        .fadeIn(duration: AppMotion.slow, curve: AppMotion.emphasized)
+        .slideY(
+          begin: 0.12,
+          end: 0,
+          duration: AppMotion.slow,
+          curve: AppMotion.emphasized,
+        );
   }
 }
 
@@ -577,15 +615,17 @@ class _Chip extends StatelessWidget {
         ? AppColors.dark
         : AppColors.light;
 
-    return GestureDetector(
+    return Pressable(
       onTap: onTap,
+      scale: 0.94,
+      dim: 0.85,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutCubic,
+        duration: AppMotion.base,
+        curve: AppMotion.emphasized,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(99),
-          gradient: selected ? kGoldGradient : null,
+          gradient: selected ? kNavyGradient : null,
           color: selected ? null : c.surface,
           border: Border.all(color: selected ? Colors.transparent : c.divider),
         ),
@@ -593,10 +633,15 @@ class _Chip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
-              Icon(
-                icon,
-                size: 17,
-                color: selected ? const Color(0xFF2A1F0A) : c.textSubtle,
+              AnimatedScale(
+                scale: selected ? 1.08 : 1.0,
+                duration: AppMotion.base,
+                curve: AppMotion.spring,
+                child: Icon(
+                  icon,
+                  size: 17,
+                  color: selected ? AppColors.porcelain : c.textSubtle,
+                ),
               ),
               const SizedBox(width: 7),
             ],
@@ -605,7 +650,7 @@ class _Chip extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 13.5,
-                color: selected ? const Color(0xFF2A1F0A) : c.text,
+                color: selected ? AppColors.porcelain : c.text,
               ),
             ),
           ],
@@ -616,9 +661,10 @@ class _Chip extends StatelessWidget {
 }
 
 class _AgentTile extends StatelessWidget {
-  const _AgentTile({required this.agent});
+  const _AgentTile({super.key, required this.agent, this.index = 0});
 
   final LegalAgent agent;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -626,83 +672,87 @@ class _AgentTile extends StatelessWidget {
         ? AppColors.dark
         : AppColors.light;
 
-    return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.agentDetail, arguments: agent),
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: c.surface,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: c.divider),
-        ),
-        child: Row(
-          children: [
-            AgentAvatar(
-              emoji: agent.emoji,
-              gradientIndex: agent.gradientIndex,
-              size: 56,
+    return Pressable(
+          onTap: () => Get.toNamed(AppRoutes.agentDetail, arguments: agent),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: c.surface,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: c.divider),
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+            child: Row(
+              children: [
+                AgentAvatar(agent: agent, size: 56),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(
-                          agent.name,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
                       Row(
-                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
-                            Icons.star_rounded,
-                            color: Colors.amber,
-                            size: 16,
-                          ),
-                          Text(
-                            '${agent.rating}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 13,
+                          Expanded(
+                            child: Text(
+                              agent.name,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.star_rounded,
+                                color: AppColors.brass,
+                                size: 16,
+                              ),
+                              Text(
+                                '${agent.rating}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        agent.title,
+                        style: TextStyle(color: c.textSubtle, fontSize: 12.5),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 6,
+                        children: [
+                          _Tag(
+                            label:
+                                '${Formatters.compact(agent.consultations)} consults',
+                            icon: Icons.forum_rounded,
+                          ),
+                          _Tag(
+                            label: '${(agent.successRate * 100).round()}% win',
+                            icon: Icons.verified_rounded,
                           ),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    agent.title,
-                    style: TextStyle(color: c.textSubtle, fontSize: 12.5),
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 6,
-                    children: [
-                      _Tag(
-                        label:
-                            '${Formatters.compact(agent.consultations)} consults',
-                        icon: Icons.forum_rounded,
-                      ),
-                      _Tag(
-                        label: '${(agent.successRate * 100).round()}% win',
-                        icon: Icons.verified_rounded,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+                Icon(Icons.chevron_right_rounded, color: c.textSubtle),
+              ],
             ),
-            Icon(Icons.chevron_right_rounded, color: c.textSubtle),
-          ],
-        ),
-      ),
-    );
+          ),
+        )
+        .animate(delay: AppMotion.staggerStep * min(index, 6))
+        .fadeIn(duration: AppMotion.slow, curve: AppMotion.emphasized)
+        .slideY(
+          begin: 0.08,
+          end: 0,
+          duration: AppMotion.slow,
+          curve: AppMotion.emphasized,
+        );
   }
 }
 
