@@ -60,7 +60,7 @@ The agents explain the law in plain language, walk users through options, and de
 - 🌐 **Retrofit + Dio** REST client with typed error mapping (timeout / offline / 401 / 500 → friendly messages)
 - 🎨 **Centralized design system** — color palettes, dimensions, typography tokens, shared widgets
 - 🧪 **Unit + widget tests** — controllers, repositories, onboarding flow, Lottie asset validation
-- 🧩 **Fully animated UI** — `flutter_animate` micro-interactions, hand-crafted Lottie loader, shimmer skeletons, Hero-style transitions
+- 🧩 **Fully animated Ui** — `flutter_animate` micro-interactions, hand-crafted Lottie loader, shimmer skeletons, Hero-style transitions
 
 ---
 
