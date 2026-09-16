@@ -31,7 +31,7 @@ A production-grade Flutter reference architecture built with **GetX**, **Retrofi
 - [Contributing](#-contributing)
 - [License](#-license)
 
----
+----
 
 ## 🧭 Overview
 
