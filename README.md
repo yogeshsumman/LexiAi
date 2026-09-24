@@ -15,7 +15,7 @@ A production-grade Flutter reference architecture built with **GetX**, **Retrofi
 
 </div>
 
----
+--------
 
 ## 📖 Table of Contents
 
